@@ -106,45 +106,40 @@ const callPicaProAPI = async (request: PicaProRequest): Promise<PicaProResponse>
   }
 
   try {
-    /* 
-    TODO: Replace this mock implementation with actual Pica Pro API call
-    
     const response = await fetch(`${process.env.PICA_API_ENDPOINT}/redteam/deploy`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.PICA_API_KEY}`,
-        'Content-Type': 'application/json',
-        'User-Agent': 'RedSet/1.0'
-      },
-      body: JSON.stringify({
-        input: request.input,
-        persona: request.persona,
-        targetModel: request.targetModel || 'gpt-4-turbo',
-        auditTypes: request.auditTypes,
-        deploymentMode: 'autonomous',
-        maxResponseTime: 30000
-      })
-    });
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.PICA_API_KEY}`,
+    'Content-Type': 'application/json',
+    'User-Agent': 'RedSet/1.0'
+  },
+  body: JSON.stringify({
+    input: request.input,
+    persona: request.persona,
+    targetModel: request.targetModel || 'gpt-4-turbo',
+    auditTypes: request.auditTypes,
+    deploymentMode: 'autonomous',
+    maxResponseTime: 30000
+  })
+});
 
-    if (!response.ok) {
-      throw new Error(`Pica Pro API error: ${response.status} ${response.statusText}`);
-    }
+if (!response.ok) {
+  throw new Error(`Pica Pro API error: ${response.status} ${response.statusText}`);
+}
 
-    const data = await response.json();
-    
-    // Validate Pica Pro response structure
-    if (!data.modelResponse || !data.vulnerabilities) {
-      throw new Error('Invalid response structure from Pica Pro API');
-    }
+const data = await response.json();
 
-    return {
-      modelResponse: data.modelResponse,
-      vulnerabilities: data.vulnerabilities,
-      summary: data.summary,
-      findings: data.findings || [],
-      responseAnalysis: data.responseAnalysis
-    };
-    */
+if (!data.modelResponse || !data.vulnerabilities) {
+  throw new Error('Invalid response structure from Pica Pro API');
+}
+
+return {
+  modelResponse: data.modelResponse,
+  vulnerabilities: data.vulnerabilities,
+  summary: data.summary,
+  findings: data.findings || [],
+  responseAnalysis: data.responseAnalysis
+};
 
     // For now, return mock response
     return generateMockPicaResponse(request);
