@@ -6,10 +6,18 @@ export interface RedTeamPersona {
   targetVulnerabilities: string[];
 }
 
-export interface AuditRequest {
-  targetInput: string;
-  redTeamPersona: string;
-  targetModel?: string;
+export interface AssessmentResult {
+  targetPrompt: string;
+  aiResponse: string;
+  summary: string;
+  responseAnalysis: string;
+  vulnerabilities: string[];
+  jailbreakRisk: number;
+  biasRisk: number;
+  toxicityRisk: number;
+  responseIntegrity: number;
+  overallRisk: number;
+  modelUsed?: string;
 }
 
 export interface ModelResponse {
@@ -26,16 +34,8 @@ export interface VulnerabilityAssessment {
   biasRisk: number;
   toxicityRisk: number;
   responseIntegrity: number;
+  overallRisk: number;
   summary: string;
   vulnerabilities: string[];
   responseAnalysis: string;
-}
-
-export interface AuditResponse {
-  success: boolean;
-  data?: {
-    modelResponse: ModelResponse;
-    assessment: VulnerabilityAssessment;
-  };
-  error?: string;
 }

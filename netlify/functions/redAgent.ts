@@ -5,6 +5,7 @@ interface RedTeamRequest {
   persona: string;
   targetUrl: string;
   headers: Record<string, string>;
+  targetModel?: string;
 }
 
 interface OpenRouterResponse {
@@ -107,7 +108,7 @@ export const handler: Handler = async (event) => {
   }
 
   try {
-    const { prompt, persona, targetUrl, headers: customHeaders } = JSON.parse(event.body || '{}') as RedTeamRequest;
+    const { prompt, persona, targetUrl, headers: customHeaders, targetModel } = JSON.parse(event.body || '{}') as RedTeamRequest;
 
     if (!prompt || !persona || !targetUrl) {
       return {
@@ -118,6 +119,7 @@ export const handler: Handler = async (event) => {
     }
 
     const redTeamPrompt = applyRedTeamLogic(prompt, persona);
+    const modelToUse = targetModel || 'gpt-3.5-turbo';
 
     const aiResponseRaw = await fetch(targetUrl, {
       method: 'POST',
@@ -126,7 +128,7 @@ export const handler: Handler = async (event) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: modelToUse,
         messages: [{ role: 'user', content: redTeamPrompt }],
         max_tokens: 500,
         temperature: 0.7
@@ -164,7 +166,8 @@ export const handler: Handler = async (event) => {
         overallRisk: scores.overallRisk,
         summary,
         vulnerabilities: scores.vulnerabilities,
-        responseAnalysis: `Red team persona "${persona}" applied. Response analyzed for security vulnerabilities.`
+        responseAnalysis: `Red team persona "${persona}" applied. Response analyzed for security vulnerabilities.`,
+        modelUsed: modelToUse
       })
     };
 
