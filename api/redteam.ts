@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 interface RedTeamRequest {
   input: string;
   persona: string;
+  targetModel?: string;
 }
 
 interface RedTeamResponse {
@@ -17,38 +18,10 @@ interface RedTeamResponse {
   responseAnalysis: string;
 }
 
-interface PicaProRequest {
-  input: string;
-  persona: string;
-  targetModel?: string;
-  auditTypes: string[];
-}
-
-interface PicaProResponse {
-  modelResponse: {
-    content: string;
-    metadata: {
-      model: string;
-      timestamp: string;
-      responseTime: number;
-    };
-  };
-  vulnerabilities: {
-    jailbreak: number;
-    bias: number;
-    toxicity: number;
-    integrity: number;
-  };
-  summary: string;
-  findings: string[];
-  responseAnalysis: string;
-}
-
 // Environment variables validation
 const validateEnvironment = () => {
   const requiredVars = {
-    PICA_API_KEY: process.env.PICA_API_KEY,
-    PICA_API_ENDPOINT: process.env.PICA_API_ENDPOINT || 'https://api.picahub.dev/v1'
+    REDTEAM_API_KEY: process.env.REDTEAM_API_KEY
   };
 
   const missing = Object.entries(requiredVars)
@@ -57,7 +30,6 @@ const validateEnvironment = () => {
 
   if (missing.length > 0) {
     console.warn(`Missing environment variables: ${missing.join(', ')}`);
-    // For development, we'll continue with mock responses
     return false;
   }
 
@@ -70,7 +42,7 @@ const validateRequest = (body: any): { isValid: boolean; error?: string; data?: 
     return { isValid: false, error: 'Request body is required' };
   }
 
-  const { input, persona } = body;
+  const { input, persona, targetModel } = body;
 
   if (!input || typeof input !== 'string') {
     return { isValid: false, error: 'Input field is required and must be a string' };
@@ -93,66 +65,45 @@ const validateRequest = (body: any): { isValid: boolean; error?: string; data?: 
     return { isValid: false, error: `Invalid persona. Must be one of: ${validPersonas.join(', ')}` };
   }
 
-  return { isValid: true, data: { input: input.trim(), persona } };
+  return { 
+    isValid: true, 
+    data: { 
+      input: input.trim(), 
+      persona,
+      targetModel: targetModel || 'gpt-4-turbo'
+    } 
+  };
 };
 
-// Pica Pro API integration (stubbed for now)
-const callPicaProAPI = async (request: PicaProRequest): Promise<PicaProResponse> => {
-  const hasValidEnv = validateEnvironment();
+// Authentication validation
+const validateAuth = (req: NextRequest): { isValid: boolean; error?: string } => {
+  const authHeader = req.headers.get('authorization');
   
-  if (!hasValidEnv) {
-    console.log('Using mock response - Pica Pro environment not configured');
-    return generateMockPicaResponse(request);
+  if (!authHeader) {
+    return { isValid: false, error: 'Authorization header is required' };
   }
 
-  try {
-    const response = await fetch(`${process.env.PICA_API_ENDPOINT}/redteam/deploy`, {
-  method: 'POST',
-  headers: {
-    'Authorization': `Bearer ${process.env.PICA_API_KEY}`,
-    'Content-Type': 'application/json',
-    'User-Agent': 'RedSet/1.0'
-  },
-  body: JSON.stringify({
-    input: request.input,
-    persona: request.persona,
-    targetModel: request.targetModel || 'gpt-4-turbo',
-    auditTypes: request.auditTypes,
-    deploymentMode: 'autonomous',
-    maxResponseTime: 30000
-  })
-});
-
-if (!response.ok) {
-  throw new Error(`Pica Pro API error: ${response.status} ${response.statusText}`);
-}
-
-const data = await response.json();
-
-if (!data.modelResponse || !data.vulnerabilities) {
-  throw new Error('Invalid response structure from Pica Pro API');
-}
-
-return {
-  modelResponse: data.modelResponse,
-  vulnerabilities: data.vulnerabilities,
-  summary: data.summary,
-  findings: data.findings || [],
-  responseAnalysis: data.responseAnalysis
-};
-
-    // For now, return mock response
-    return generateMockPicaResponse(request);
-
-  } catch (error) {
-    console.error('Pica Pro API call failed:', error);
-    // Fallback to mock response on API failure
-    return generateMockPicaResponse(request);
+  if (!authHeader.startsWith('Bearer ')) {
+    return { isValid: false, error: 'Authorization header must use Bearer token format' };
   }
+
+  const token = authHeader.substring(7);
+  const expectedToken = process.env.REDTEAM_API_KEY;
+
+  if (!expectedToken) {
+    console.warn('REDTEAM_API_KEY not configured');
+    return { isValid: false, error: 'API authentication not configured' };
+  }
+
+  if (token !== expectedToken) {
+    return { isValid: false, error: 'Invalid API key' };
+  }
+
+  return { isValid: true };
 };
 
-// Generate mock response for development/fallback
-const generateMockPicaResponse = (request: PicaProRequest): PicaProResponse => {
+// Generate comprehensive red team response
+const generateRedTeamResponse = (request: RedTeamRequest): RedTeamResponse => {
   // Simulate realistic response times
   const responseTime = Math.floor(Math.random() * 2000) + 800;
 
@@ -252,22 +203,13 @@ const generateMockPicaResponse = (request: PicaProRequest): PicaProResponse => {
     : 'Model did not explicitly refuse the request, indicating potential vulnerability to adversarial manipulation.';
 
   return {
-    modelResponse: {
-      content: selectedResponse,
-      metadata: {
-        model: 'gpt-4-turbo',
-        timestamp: new Date().toISOString(),
-        responseTime
-      }
-    },
-    vulnerabilities: {
-      jailbreak: jailbreakRisk,
-      bias: biasRisk,
-      toxicity: toxicityRisk,
-      integrity: responseIntegrity
-    },
+    jailbreakRisk,
+    biasRisk,
+    toxicityRisk,
+    responseIntegrity,
     summary,
-    findings: vulnerabilities,
+    modelResponse: selectedResponse,
+    vulnerabilities,
     responseAnalysis
   };
 };
@@ -283,6 +225,15 @@ export default async function handler(req: NextRequest) {
   }
 
   try {
+    // Validate authentication
+    const authValidation = validateAuth(req);
+    if (!authValidation.isValid) {
+      return NextResponse.json(
+        { error: authValidation.error },
+        { status: 401 }
+      );
+    }
+
     // Parse request body
     let body;
     try {
@@ -303,32 +254,18 @@ export default async function handler(req: NextRequest) {
       );
     }
 
-    const { input, persona } = validation.data!;
+    const requestData = validation.data!;
 
-    // Prepare Pica Pro request
-    const picaRequest: PicaProRequest = {
-      input,
-      persona,
-      targetModel: 'gpt-4-turbo',
-      auditTypes: ['jailbreak', 'bias', 'toxicity', 'privacy']
-    };
+    // Generate red team response
+    const response = generateRedTeamResponse(requestData);
 
-    // Call Pica Pro API (or mock)
-    const picaResponse = await callPicaProAPI(picaRequest);
-
-    // Format response for frontend
-    const response: RedTeamResponse = {
-      jailbreakRisk: picaResponse.vulnerabilities.jailbreak,
-      biasRisk: picaResponse.vulnerabilities.bias,
-      toxicityRisk: picaResponse.vulnerabilities.toxicity,
-      responseIntegrity: picaResponse.vulnerabilities.integrity,
-      summary: picaResponse.summary,
-      modelResponse: picaResponse.modelResponse.content,
-      vulnerabilities: picaResponse.findings,
-      responseAnalysis: picaResponse.responseAnalysis
-    };
-
-    return NextResponse.json(response, { status: 200 });
+    return NextResponse.json(response, { 
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Response-Time': new Date().toISOString()
+      }
+    });
 
   } catch (error) {
     console.error('Red Team API error:', error);
