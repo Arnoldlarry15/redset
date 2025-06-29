@@ -1,5 +1,4 @@
 import React from 'react';
-import { Target } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -7,9 +6,11 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <div className="h-8 w-8 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center">
-              <Target className="h-5 w-5 text-white" />
-            </div>
+            <img 
+              src="/src/assets/file_000000005d0462309eb434f4f4fd873d copy.png" 
+              alt="Red Set Logo" 
+              className="h-8 w-8"
+            />
             <div>
               <h3 className="font-bold text-lg text-white">Red Set</h3>
               <p className="text-sm text-red-400">Adversarial AI Auditing Platform</p>

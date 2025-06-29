@@ -11,9 +11,11 @@ export const Hero: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           <div className="flex justify-center items-center space-x-6 mb-8">
-            <div className="h-20 w-20 bg-gradient-to-br from-red-500 to-red-700 rounded-xl flex items-center justify-center shadow-2xl">
-              <Target className="h-12 w-12 text-white" />
-            </div>
+            <img 
+              src="/src/assets/file_000000005d0462309eb434f4f4fd873d copy.png" 
+              alt="Red Set Logo" 
+              className="h-20 w-20"
+            />
             <h1 className="text-6xl md:text-7xl font-bold tracking-tight text-white">Red Set</h1>
           </div>
           <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-red-400">
