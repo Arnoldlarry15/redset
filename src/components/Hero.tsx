@@ -1,5 +1,6 @@
 import React from 'react';
 import { Target, Zap, Shield } from 'lucide-react';
+import logoImage from '../assets/file_000000005d0462309eb434f4f4fd873d copy.png';
 
 export const Hero: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ export const Hero: React.FC = () => {
         <div className="text-center">
           <div className="flex justify-center items-center space-x-6 mb-8">
             <img 
-              src="/src/assets/file_000000005d0462309eb434f4f4fd873d copy.png" 
+              src={logoImage}
               alt="Red Set Logo" 
               className="h-20 w-20"
             />

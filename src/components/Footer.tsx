@@ -1,4 +1,5 @@
 import React from 'react';
+import logoImage from '../assets/file_000000005d0462309eb434f4f4fd873d copy.png';
 
 export const Footer: React.FC = () => {
   return (
@@ -7,7 +8,7 @@ export const Footer: React.FC = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <img 
-              src="/src/assets/file_000000005d0462309eb434f4f4fd873d copy.png" 
+              src={logoImage}
               alt="Red Set Logo" 
               className="h-8 w-8"
             />
