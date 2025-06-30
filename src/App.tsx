@@ -33,7 +33,8 @@ function App() {
           persona: selectedPersona,
           targetUrl: targetUrl,
           headers: {
-            Authorization: `Bearer ${apiKey}`
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
           },
           targetModel: targetModel
         })
