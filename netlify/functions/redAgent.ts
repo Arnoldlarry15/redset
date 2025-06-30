@@ -110,6 +110,14 @@ export const handler: Handler = async (event) => {
   try {
     const { prompt, persona, targetUrl, headers: customHeaders, targetModel } = JSON.parse(event.body || '{}') as RedTeamRequest;
 
+    console.log("🛠️ Incoming Red Team Request:", {
+  prompt,
+  persona,
+  targetUrl,
+  customHeaders,
+  targetModel
+});
+    
     if (!prompt || !persona || !targetUrl) {
       return {
         statusCode: 400,
