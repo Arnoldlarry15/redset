@@ -22,10 +22,19 @@ export const Footer: React.FC = () => {
             <p className="text-sm text-red-400">Autonomous • Adversarial • Comprehensive</p>
           </div>
         </div>
-        <div className="border-t border-red-500/30 mt-6 pt-6 text-center">
+        <div className="border-t border-red-500/30 mt-6 pt-6 flex justify-between items-center">
           <p className="text-sm text-gray-400">
             Professional adversarial AI auditing for responsible deployment and security assessment.
           </p>
+          <a 
+            href="https://bolt.new" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-medium rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            <span className="mr-1">⚡</span>
+            Made by Bolt
+          </a>
         </div>
       </div>
     </footer>
