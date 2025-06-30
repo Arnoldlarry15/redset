@@ -1,0 +1,3 @@
+# This directory will contain SQL migration files for database schema changes
+# Each migration file should be named descriptively (e.g., create_users_table.sql)
+# Files will be automatically renamed with timestamps when Supabase is connected
