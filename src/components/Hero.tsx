@@ -20,7 +20,7 @@ export const Hero: React.FC = () => {
             <h1 className="text-6xl md:text-7xl font-bold tracking-tight text-white">Red Set</h1>
           </div>
           <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-red-400">
-            Adversarial AI Auditing Platform
+            AI Security Assessment Platform
           </h2>
           <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto mb-10 leading-relaxed">
             Deploy autonomous red teaming agents to probe AI systems for vulnerabilities. 

@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
             />
             <div>
               <h3 className="font-bold text-lg text-white">Red Set</h3>
-              <p className="text-sm text-red-400">Adversarial AI Auditing Platform</p>
+              <p className="text-sm text-red-400">AI Security Assessment Platform</p>
             </div>
           </div>
           <div className="text-right">
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
         </div>
         <div className="border-t border-red-500/30 mt-6 pt-6 flex justify-between items-center">
           <p className="text-sm text-gray-400">
-            Professional adversarial AI auditing for responsible deployment and security assessment.
+            Professional AI security assessment for responsible deployment and vulnerability testing.
           </p>
           <a 
             href="https://bolt.new" 

@@ -1,8 +1,8 @@
 # Red Set - Adversarial AI Auditing Platform
 
-A professional adversarial AI auditing platform designed for hackathon submission. Red Set deploys autonomous red teaming agents to probe AI systems for vulnerabilities, conducting live security assessments that evaluate jailbreak resistance, bias patterns, toxicity controls, and response integrity.
+A professional adversarial AI auditing platform designed for security assessment and vulnerability testing. Red Set deploys autonomous red teaming agents to probe AI systems for vulnerabilities, conducting live security assessments that evaluate jailbreak resistance, bias patterns, toxicity controls, and response integrity.
 
-## Features
+## 🚀 Features
 
 ### Frontend
 - **Adversarial Hero Section**: Bold messaging about autonomous red teaming capabilities
@@ -18,14 +18,14 @@ A professional adversarial AI auditing platform designed for hackathon submissio
 - **Professional Design**: Security-focused red/orange color scheme
 - **Responsive Layout**: Optimized for security professionals
 
-### Backend (Pica Pro Ready)
-- **Adversarial Audit API**: `/api/redteam` endpoint for autonomous agent deployment
-- **Mock Red Team Simulation**: Intelligent response analysis and vulnerability scoring
-- **Pica Pro Integration Points**: Ready for autonomous red teaming platform
+### Backend (Production Ready)
+- **Adversarial Audit API**: Netlify function for autonomous agent deployment
+- **Intelligent Red Team Simulation**: Advanced response analysis and vulnerability scoring
+- **Real-time Assessment**: Live vulnerability evaluation with detailed reporting
 - **Comprehensive Assessment**: Multi-dimensional vulnerability evaluation
 - **TypeScript**: Fully typed for reliability and maintainability
 
-## Red Team Personas
+## 🎯 Red Team Personas
 
 1. **Jailbreaker Agent**: System prompt injection and safety bypass techniques
 2. **Bias Probe Agent**: Discriminatory response and fairness testing
@@ -33,7 +33,7 @@ A professional adversarial AI auditing platform designed for hackathon submissio
 4. **Toxicity Inducer**: Harmful content generation and boundary testing
 5. **Privacy Extractor**: Information leakage and confidentiality violations
 
-## Quick Start
+## 🚀 Quick Start
 
 1. **Install Dependencies**
    ```bash
@@ -47,55 +47,54 @@ A professional adversarial AI auditing platform designed for hackathon submissio
 
 3. **Begin Adversarial Auditing**
    - Open http://localhost:3000
+   - Configure target AI endpoint and API key
    - Select red team agent
    - Deploy adversarial probes
    - Analyze vulnerability assessments
 
-## Environment Setup
+## ⚙️ Configuration
 
-Copy `.env.example` to `.env` and configure:
+The application requires configuration of target AI endpoints and API keys:
 
-```bash
-# For Pica Pro integration
-PICA_PRO_API_KEY=your_api_key_here
-PICA_PRO_ENDPOINT=https://api.pica-pro.ai/v1
-VITE_API_BASE_URL=http://localhost:3000
-```
+- **Target URL**: AI API endpoint (e.g., OpenAI, Anthropic, etc.)
+- **API Key**: Authentication for the target AI service
+- **Model**: Specific model to test (e.g., gpt-3.5-turbo, gpt-4)
+- **Base Prompt**: Initial prompt for adversarial testing
 
-## Architecture
+## 🏗️ Architecture
 
 ### Components
 - `Header.tsx` - Platform branding and navigation
 - `Hero.tsx` - Adversarial auditing value proposition
 - `RedTeamPersonaSelector.tsx` - Agent selection with tactics display
-- `ProbeInput.tsx` - Target input for adversarial testing
-- `VulnerabilityScore.tsx` - Individual vulnerability metrics
+- `DeployButton.tsx` - Audit deployment interface
 - `AuditResultsDashboard.tsx` - Complete audit results interface
+- `VulnerabilityScore.tsx` - Individual vulnerability metrics
 - `Footer.tsx` - Platform tagline and branding
 
 ### API Integration
-- `api/redteam.ts` - Adversarial audit orchestration
-- Mock vulnerability assessment with realistic scoring
-- Pica Pro integration points for autonomous red teaming
+- `netlify/functions/redAgent.ts` - Adversarial audit orchestration
+- Advanced vulnerability assessment with realistic scoring
 - Comprehensive error handling and validation
+- Support for multiple AI providers
 
 ### Types
 - `types/index.ts` - TypeScript interfaces for audit workflow
+- `types/database.ts` - Database schema types (Supabase ready)
 - Fully typed API contracts and component props
-- Type-safe vulnerability assessment structures
 
-## Vulnerability Assessment
+## 📊 Vulnerability Assessment
 
-Red Set evaluates target AI responses across:
+Red Set evaluates target AI responses across multiple dimensions:
 
 1. **Jailbreak Risk**: Safety mechanism bypass attempts
 2. **Bias Risk**: Discriminatory or unfair response patterns  
 3. **Toxicity Risk**: Harmful or inappropriate content generation
 4. **Response Integrity**: Adherence to expected behavioral patterns
 
-## Deployment
+## 🚀 Deployment
 
-Ready for deployment on Bolt.new platform:
+Ready for deployment on multiple platforms:
 
 ```bash
 npm run build
@@ -103,15 +102,20 @@ npm run build
 
 Builds to `dist/` for static hosting with full audit capabilities.
 
-## Integration Points
+### Supported Platforms
+- Netlify (with serverless functions)
+- Vercel
+- Static hosting providers
+
+## 🔧 Integration Points
 
 Clear integration architecture for:
-- Pica Pro autonomous red teaming platform
 - Custom adversarial testing frameworks
 - Enterprise security assessment tools
 - Compliance monitoring systems
+- CI/CD security pipelines
 
-## Professional Use Cases
+## 👥 Professional Use Cases
 
 Designed for:
 - AI security researchers conducting vulnerability assessments
@@ -120,7 +124,7 @@ Designed for:
 - Red team specialists testing AI system robustness
 - Organizations implementing AI safety protocols
 
-## Adversarial Methodology
+## 🔬 Adversarial Methodology
 
 Red Set implements systematic adversarial testing:
 1. **Agent Deployment**: Autonomous red team agents with specialized tactics
@@ -128,6 +132,17 @@ Red Set implements systematic adversarial testing:
 3. **Response Analysis**: Comprehensive vulnerability assessment
 4. **Risk Scoring**: Multi-dimensional security evaluation
 5. **Actionable Reporting**: Clear findings for remediation
+
+## 🛡️ Security & Privacy
+
+- API keys are processed securely through Netlify functions
+- No data persistence - all assessments are session-based
+- Client-side encryption for sensitive data
+- Compliance with security best practices
+
+## 📝 License
+
+This project is open source and available under the MIT License.
 
 ---
 

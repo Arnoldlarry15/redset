@@ -14,7 +14,7 @@ export const Header: React.FC = () => {
             />
             <div>
               <h1 className="text-2xl font-bold text-white">Red Set</h1>
-              <p className="text-sm text-red-400">Adversarial AI Auditing</p>
+              <p className="text-sm text-red-400">AI Security Assessment</p>
             </div>
           </div>
           <div className="text-right">
