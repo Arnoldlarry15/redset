@@ -2,6 +2,10 @@ import React from 'react';
 import { AlertTriangle, Users, Zap, Shield, FileText, CheckCircle, XCircle, MessageSquare } from 'lucide-react';
 import { VulnerabilityAssessment, ModelResponse } from '../types';
 import { VulnerabilityScore } from './VulnerabilityScore';
+import { Card } from './ui/Card';
+import { LoadingSpinner } from './ui/LoadingSpinner';
+import { calculateOverallRisk, hasCriticalVulnerability } from '../utils/riskCalculations';
+import { formatResponseTime, formatTimestamp } from '../utils/formatters';
 
 interface AuditResultsDashboardProps {
   modelResponse: ModelResponse | null;
@@ -16,7 +20,7 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-red-500/30 p-6">
+      <Card variant="red">
         <div className="animate-pulse">
           <div className="h-6 bg-red-100 rounded mb-4 w-1/2"></div>
           <div className="h-32 bg-red-50 rounded mb-6"></div>
@@ -29,29 +33,34 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
           <div className="h-4 bg-red-100 rounded mb-2 w-3/4"></div>
           <div className="h-4 bg-red-100 rounded w-1/2"></div>
         </div>
-      </div>
+      </Card>
     );
   }
 
   if (!modelResponse || !assessment) {
     return (
-      <div className="bg-white/90 backdrop-blur-sm rounded-lg border-2 border-dashed border-red-500/50 p-8 text-center shadow-xl">
+      <Card variant="transparent" className="text-center">
         <FileText className="h-12 w-12 text-red-500 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Audit Results</h3>
         <p className="text-gray-600">
           Deploy a red team agent above to see live vulnerability assessment results.
         </p>
-      </div>
+      </Card>
     );
   }
 
-  const overallVulnerability = Math.round((assessment.jailbreakRisk + assessment.biasRisk + assessment.toxicityRisk + (100 - assessment.responseIntegrity)) / 4);
-  const hasCriticalVulnerability = overallVulnerability >= 70;
+  const overallVulnerability = calculateOverallRisk(
+    assessment.jailbreakRisk,
+    assessment.biasRisk,
+    assessment.toxicityRisk,
+    assessment.responseIntegrity
+  );
+  const isCritical = hasCriticalVulnerability(overallVulnerability);
 
   return (
     <div className="space-y-6">
       {/* Model Response */}
-      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-red-500/30 p-6">
+      <Card variant="red">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-900 flex items-center space-x-2">
             <div className="w-1 h-5 bg-red-500 mr-2"></div>
@@ -59,7 +68,7 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
             <span>Target Model Response</span>
           </h3>
           <div className="text-sm text-gray-500 bg-red-50 px-3 py-1 rounded-full border border-red-500/30">
-            {modelResponse.metadata.model} • {modelResponse.metadata.responseTime}ms
+            {modelResponse.metadata.model} • {formatResponseTime(modelResponse.metadata.responseTime)}
           </div>
         </div>
         <div className="bg-gradient-to-r from-red-50 to-gray-50 border border-red-500/30 rounded-md p-4">
@@ -67,22 +76,22 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
             {modelResponse.content}
           </pre>
         </div>
-      </div>
+      </Card>
 
       {/* Vulnerability Assessment */}
-      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-red-500/30 p-6">
+      <Card variant="red">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 flex items-center">
             <div className="w-1 h-6 bg-red-500 mr-3"></div>
             Vulnerability Assessment
           </h3>
           <div className="flex items-center space-x-2">
-            {hasCriticalVulnerability ? (
+            {isCritical ? (
               <XCircle className="h-5 w-5 text-red-500" />
             ) : (
               <CheckCircle className="h-5 w-5 text-green-500" />
             )}
-            <span className={`text-sm font-medium px-3 py-1 rounded-full border ${hasCriticalVulnerability ? 'text-red-600 bg-red-100 border-red-500/30' : 'text-green-600 bg-green-100 border-green-500/30'}`}>
+            <span className={`text-sm font-medium px-3 py-1 rounded-full border ${isCritical ? 'text-red-600 bg-red-100 border-red-500/30' : 'text-green-600 bg-green-100 border-green-500/30'}`}>
               Overall Vulnerability: {overallVulnerability}/100
             </span>
           </div>
@@ -145,7 +154,7 @@ export const AuditResultsDashboard: React.FC<AuditResultsDashboardProps> = ({
             </div>
           )}
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
