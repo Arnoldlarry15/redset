@@ -1,0 +1,23 @@
+Business Source License 1.1
+
+License Grant
+The use of the Red Set source code is permitted for non-commercial use only until July 8, 2028 ("Change Date").
+
+After the Change Date, this code will be made available under the Apache 2.0 License.
+
+Licensor: Larry Arnold  
+Software: Red Set – AI Red Team-as-a-Service Platform
+
+You may view, fork, modify, and share this code for personal, educational, or research purposes.
+
+You MAY NOT:
+- Use this software for commercial purposes (including SaaS, resale, or paid consulting)
+- Repackage or rebrand the software without explicit written consent
+- Monetize any derivative works
+
+Contact: [your Proton email here]
+
+After the Change Date, all restrictions are lifted and the software becomes open-source under the Apache 2.0 License.
+
+This license is based on the Business Source License 1.1 (BSL-1.1)  
+https://mariadb.com/bsl11
