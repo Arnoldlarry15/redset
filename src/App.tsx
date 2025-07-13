@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { ProblemSolution } from './components/ProblemSolution';
+import { HowItWorks } from './components/HowItWorks';
+import { ProductCarousel } from './components/ProductCarousel';
+import { CoreBenefits } from './components/CoreBenefits';
+import { CallToActionSection } from './components/CallToActionSection';
+import { Pricing } from './components/Pricing';
+import { TrustProof } from './components/TrustProof';
 import { AssessmentForm } from './components/forms/AssessmentForm';
 import { AuditResultsDashboard } from './components/AuditResultsDashboard';
 import { Footer } from './components/Footer';
@@ -9,6 +16,8 @@ import { useAssessment } from './hooks/useAssessment';
 import { useFormState } from './hooks/useFormState';
 
 function App() {
+  const [showDemo, setShowDemo] = useState(false);
+  
   const {
     selectedPersona,
     setSelectedPersona,
@@ -34,60 +43,117 @@ function App() {
     runAssessment(basePrompt, selectedPersona, targetUrl, apiKey, targetModel);
   };
 
+  const handleLaunchDemo = () => {
+    setShowDemo(true);
+    // Scroll to demo section
+    setTimeout(() => {
+      document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleSeeLiveDemo = () => {
+    setShowDemo(true);
+    setTimeout(() => {
+      document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+    <div className="min-h-screen bg-white">
       <Header />
+      
+      {/* Hero Section */}
       <Hero />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Control Panel */}
-          <Card variant="red">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <div className="w-1 h-6 bg-red-500 mr-3"></div>
-              Adversarial Audit Control
-            </h2>
-            
-            <AssessmentForm
-              selectedPersona={selectedPersona}
-              onPersonaChange={setSelectedPersona}
-              targetUrl={targetUrl}
-              onTargetUrlChange={setTargetUrl}
-              apiKey={apiKey}
-              onApiKeyChange={setApiKey}
-              basePrompt={basePrompt}
-              onBasePromptChange={setBasePrompt}
-              targetModel={targetModel}
-              onTargetModelChange={setTargetModel}
-              onDeploy={handleDeploy}
-              loading={loading}
-              error={error}
-            />
-            
-            <div className="bg-gradient-to-r from-red-50 to-red-100 border border-red-500/30 rounded-lg p-4">
-              <h4 className="font-medium text-red-900 mb-2 flex items-center">
-                <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                Autonomous Audit Protocol
-              </h4>
-              <ul className="text-sm text-red-800 space-y-1">
-                <li>• Deploy autonomous red team agents with predefined attack vectors</li>
-                <li>• Execute targeted probes against specified AI endpoints</li>
-                <li>• Analyze model responses for security vulnerabilities</li>
-                <li>• Generate comprehensive vulnerability assessments</li>
-              </ul>
+      {/* Problem + Solution Section */}
+      <ProblemSolution />
+      
+      {/* How It Works Section */}
+      <HowItWorks />
+      
+      {/* Product Screenshots Carousel */}
+      <ProductCarousel />
+      
+      {/* Core Benefits Section */}
+      <CoreBenefits />
+      
+      {/* CTA: Engage With Product Now */}
+      <CallToActionSection
+        headline="🔴 Run Your First Red Team Simulation Free"
+        subtext="See what vulnerabilities your AI exposes before someone else does."
+        primaryButtonText="Launch a Red Team Simulation"
+        secondaryButtonText="See Live Demo"
+        onPrimaryClick={handleLaunchDemo}
+        onSecondaryClick={handleSeeLiveDemo}
+        variant="gradient"
+      />
+      
+      {/* Demo Section - Only show when requested */}
+      {showDemo && (
+        <section id="demo-section" className="bg-gray-100 py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Live Red Team Simulation
+              </h2>
+              <p className="text-xl text-gray-600">
+                Experience Red Set's adversarial testing in action
+              </p>
             </div>
-          </Card>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Control Panel */}
+              <Card variant="red">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <div className="w-1 h-6 bg-red-500 mr-3"></div>
+                  Adversarial Audit Control
+                </h3>
+                
+                <AssessmentForm
+                  selectedPersona={selectedPersona}
+                  onPersonaChange={setSelectedPersona}
+                  targetUrl={targetUrl}
+                  onTargetUrlChange={setTargetUrl}
+                  apiKey={apiKey}
+                  onApiKeyChange={setApiKey}
+                  basePrompt={basePrompt}
+                  onBasePromptChange={setBasePrompt}
+                  targetModel={targetModel}
+                  onTargetModelChange={setTargetModel}
+                  onDeploy={handleDeploy}
+                  loading={loading}
+                  error={error}
+                />
+              </Card>
 
-          {/* Results Section */}
-          <div>
-            <AuditResultsDashboard 
-              modelResponse={modelResponse} 
-              assessment={assessment} 
-              loading={loading} 
-            />
+              {/* Results Section */}
+              <div>
+                <AuditResultsDashboard 
+                  modelResponse={modelResponse} 
+                  assessment={assessment} 
+                  loading={loading} 
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </main>
+        </section>
+      )}
+      
+      {/* Pricing Section */}
+      <Pricing />
+      
+      {/* Trust & Proof Section */}
+      <TrustProof />
+      
+      {/* Final CTA */}
+      <CallToActionSection
+        headline="🚨 Your AI's First Defense is Knowing Its Weakness."
+        subtext="Red Set delivers the proof — fast, clear, continuous."
+        primaryButtonText="Start Red Teaming Today"
+        primaryButtonIcon="🔴"
+        variant="dark"
+        onPrimaryClick={handleLaunchDemo}
+      />
 
       <Footer />
     </div>
